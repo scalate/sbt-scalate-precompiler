@@ -10,7 +10,7 @@ lazy val plugin = (project in file("plugin")).settings(baseSettings).settings(
     (sourceManaged: File, name: String, vgp: String, buildVersion) => {
       val file = sourceManaged / vgp.replace(".","/") / "Version.scala"
       val code = { 
-s"""package skinny.scalate
+s"""package org.fusesource.scalate
 object Version {
   val name    = "${name}"
   val version = "${buildVersion}"
@@ -24,8 +24,8 @@ object Version {
 ).settings(scalariformSettings)
 
 lazy val baseSettings = Seq(
-  organization := "org.skinny-framework",
-  version := "1.8.0.0",
+  organization := "org.scalatra.scalate",
+  version := "1.8.0.1",
   transitiveClassifiers in Global := Seq(Artifact.SourceClassifier),
   parallelExecution in Test := false,
   logBuffered in Test := false,
@@ -38,7 +38,7 @@ lazy val baseSettings = Seq(
     if (version.value.trim.endsWith("SNAPSHOT")) Some("snapshots" at nexus + "content/repositories/snapshots")
     else Some("releases" at nexus + "service/local/staging/deploy/maven2")
   },
-  pomExtra := <url>https://github.com/skinny-framework/sbt-scalate-precompiler</url>
+  pomExtra := <url>https://github.com/scalate/sbt-scalate-precompiler</url>
   <licenses>
     <license>
       <name>MIT License</name>
@@ -47,8 +47,8 @@ lazy val baseSettings = Seq(
     </license>
   </licenses>
   <scm>
-    <url>git@github.com:skinny-framework/sbt-scalate-precompiler.git</url>
-    <connection>scm:git:git@github.com:skinny-framework/sbt-scalate-precompiler.git</connection>
+    <url>git@github.com:scalate/sbt-scalate-precompiler.git</url>
+    <connection>scm:git:git@github.com:scalate/sbt-scalate-precompiler.git</connection>
   </scm>
   <developers>
     <developer>

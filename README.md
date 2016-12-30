@@ -1,6 +1,6 @@
 # sbt-scalate-precompiler
 
-[![Build Status](https://travis-ci.org/skinny-framework/sbt-scalate-precompiler.svg?branch=master)](https://travis-ci.org/skinny-framework/sbt-scalate-precompiler)
+[![Build Status](https://travis-ci.org/scalate/sbt-scalate-precompiler.svg?branch=master)](https://travis-ci.org/scalate/sbt-scalate-precompiler)
 
 Integration for SBT that lets you generate sources for your Scalate templates and precompile them as part of the normal compilation process. 
 This plugin is published to sonatype oss repository.
@@ -12,7 +12,7 @@ This plugin is published to sonatype oss repository.
 Include the plugin in `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.skinny-framework" % "sbt-scalate-precompiler" % "1.8.0.0")
+addSbtPlugin("org.scalatra.scalate" % "sbt-scalate-precompiler" % "1.8.0.1")
 ```
 
 Configure the plugin in `build.sbt`:
@@ -73,7 +73,7 @@ Configure the plugin in `project/build.scala`:
 
 import sbt._
 import sbt.Keys._
-import skinny.scalate.ScalatePlugin._
+import org.fusesource.scalate.ScalatePlugin._
 import ScalateKeys._
 
 object build extends Build {  

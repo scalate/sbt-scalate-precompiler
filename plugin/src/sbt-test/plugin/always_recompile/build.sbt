@@ -1,4 +1,4 @@
-import skinny.scalate.ScalatePlugin._
+import org.fusesource.scalate.ScalatePlugin._
 import ScalateKeys._
 
 version := "0.1"

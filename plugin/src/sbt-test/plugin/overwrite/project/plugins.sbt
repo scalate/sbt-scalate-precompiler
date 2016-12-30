@@ -6,6 +6,6 @@ resolvers += Resolver.file("ivy-local", file(Path.userHome.absolutePath + "/.ivy
     throw new RuntimeException("""|The system property 'plugin.version' is not defined.
                                   |Specify this property using the scriptedLaunchOpts -D.""".stripMargin)
   } else {
-    addSbtPlugin("org.skinny-framework" % "sbt-scalate-precompiler" % pluginVersion)
+    addSbtPlugin("org.scalatra.scalate" % "sbt-scalate-precompiler" % pluginVersion)
   }
 }

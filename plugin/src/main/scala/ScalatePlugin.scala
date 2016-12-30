@@ -1,4 +1,4 @@
-package skinny.scalate
+package org.fusesource.scalate
 
 import scala.language.reflectiveCalls
 import scala.language.postfixOps
@@ -71,7 +71,7 @@ object ScalatePlugin extends Plugin {
     withScalateClassLoader(cp.files) { classLoader =>
       templates flatMap { t =>
 
-        val className = "skinny.scalate.Precompiler"
+        val className = "org.fusesource.scalate.Precompiler"
         val klass = classLoader.loadClass(className)
         val inst = klass.newInstance
         val generator = klass.newInstance.asInstanceOf[Generator]
@@ -115,7 +115,7 @@ object ScalatePlugin extends Plugin {
     ivyConfigurations += Scalate,
     scalateTemplateConfig in Compile := Seq(TemplateConfig(file(".") / "src" / "main" / "webapp" / "WEB-INF", Nil, Nil, Some("scalate"))),
     scalateLoggingConfig in Compile := (resourceDirectory in Compile).value / "logback.xml",
-    libraryDependencies += "org.skinny-framework" %% "scalate-precompiler" % Version.version % Scalate.name,
+    libraryDependencies += "org.scalatra.scalate" %% "scalate-precompiler" % Version.version % Scalate.name,
     sourceGenerators in Compile <+= scalateSourceGeneratorTask,
     watchSources ++= (scalateTemplateConfig in Compile).value.map(_.scalateTemplateDirectory).flatMap(d => (d ** "*").get),
     scalateOverwrite := true,

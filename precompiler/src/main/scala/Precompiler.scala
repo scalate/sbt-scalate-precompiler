@@ -1,6 +1,5 @@
-package skinny.scalate
+package org.fusesource.scalate
 
-import org.fusesource.scalate.{ TemplateEngine, TemplateSource, Binding }
 import org.fusesource.scalate.util.IOUtil
 import java.io.File
 

@@ -1,5 +1,5 @@
 #!/bin/bash
-sbt ++2.12.0 \
+sbt ++2.12.1 \
     clean \
     precompiler/publishSigned \
     ++2.11.8 \
