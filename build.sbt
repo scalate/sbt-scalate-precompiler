@@ -6,21 +6,19 @@ lazy val precompiler = (project in file("precompiler")).settings(baseSettings).s
 lazy val plugin = (project in file("plugin")).settings(baseSettings).settings(
   name := "sbt-scalate-precompiler",
   sbtPlugin := true,
-  sourceGenerators in Compile <+= (sourceManaged in Compile, name, organization, version) map { 
-    (sourceManaged: File, name: String, vgp: String, buildVersion) => {
-      val file = sourceManaged / vgp.replace(".","/") / "Version.scala"
-      val code = { 
+  sourceGenerators in Compile += Def.task{
+    val file = (sourceManaged in Compile).value / organization.value.replace(".","/") / "Version.scala"
+    val code = {
 s"""package org.fusesource.scalate
 object Version {
-  val name    = "${name}"
-  val version = "${buildVersion}"
+  val name    = "${name.value}"
+  val version = "${version.value}"
 }
 """.stripMargin
-      }
-      IO.write(file, code)
-      Seq(file)
     }
-  }
+    IO.write(file, code)
+    Seq(file)
+  }.taskValue
 ).settings(scalariformSettings)
 
 lazy val baseSettings = Seq(

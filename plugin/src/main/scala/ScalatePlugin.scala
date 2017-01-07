@@ -43,10 +43,8 @@ object ScalatePlugin extends Plugin {
 
   import ScalateKeys._
 
-  def scalateSourceGeneratorTask: Initialize[Task[Seq[File]]] = {
-    (streams, sourceManaged in Compile, scalateLoggingConfig in Compile, managedClasspath in scalateClasspaths, scalateOverwrite in Compile, scalateTemplateConfig in Compile) map {
-      (out, outputDir, logConfig, cp, overwrite, tc) => generateScalateSource(out, new File(outputDir, "scalate"), logConfig, cp, overwrite, tc)
-    }
+  def scalateSourceGeneratorTask: Initialize[Task[Seq[File]]] = Def.task{
+    generateScalateSource(streams.value, new File((sourceManaged in Compile).value, "scalate"), (scalateLoggingConfig in Compile).value, (managedClasspath in scalateClasspaths).value, (scalateOverwrite in Compile).value, (scalateTemplateConfig in Compile).value)
   }
 
   type Generator = {
@@ -116,7 +114,7 @@ object ScalatePlugin extends Plugin {
     scalateTemplateConfig in Compile := Seq(TemplateConfig(file(".") / "src" / "main" / "webapp" / "WEB-INF", Nil, Nil, Some("scalate"))),
     scalateLoggingConfig in Compile := (resourceDirectory in Compile).value / "logback.xml",
     libraryDependencies += "org.scalatra.scalate" %% "scalate-precompiler" % Version.version % Scalate.name,
-    sourceGenerators in Compile <+= scalateSourceGeneratorTask,
+    sourceGenerators in Compile += scalateSourceGeneratorTask.taskValue,
     watchSources ++= (scalateTemplateConfig in Compile).value.map(_.scalateTemplateDirectory).flatMap(d => (d ** "*").get),
     scalateOverwrite := true,
     managedClasspath in scalateClasspaths := Classpaths.managedJars(Scalate, classpathTypes.value, update.value),
