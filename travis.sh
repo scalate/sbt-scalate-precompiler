@@ -1,13 +1,14 @@
 #!/bin/bash
-sbt ++2.12.1 \
+sbt ++2.12.3 \
     precompiler/test \
     precompiler/publishLocal \
-    ++2.11.8 \
+    ++2.11.11 \
     precompiler/test \
     precompiler/publishLocal \
     ++2.10.6 \
     precompiler/test \
     precompiler/publishLocal \
-    ++2.10.6 clean \
-    plugin/publishLocal \
-    plugin/scripted
+    clean \
+    `project plugin` \
+    ^publishLocal \
+    ^scripted
