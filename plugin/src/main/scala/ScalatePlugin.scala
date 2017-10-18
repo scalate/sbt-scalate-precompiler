@@ -6,9 +6,8 @@ import sbt._
 import Keys._
 import Def.Initialize
 import java.io.File
-import sbt.classpath.ClasspathUtilities
 
-object ScalatePlugin extends Plugin {
+object ScalatePlugin extends AutoPlugin {
 
   case class Binding(
     name: String,
@@ -43,7 +42,7 @@ object ScalatePlugin extends Plugin {
 
   import ScalateKeys._
 
-  def scalateSourceGeneratorTask: Initialize[Task[Seq[File]]] = Def.task{
+  def scalateSourceGeneratorTask: Initialize[Task[Seq[File]]] = Def.task {
     generateScalateSource(streams.value, new File((sourceManaged in Compile).value, "scalate"), (scalateLoggingConfig in Compile).value, (managedClasspath in scalateClasspaths).value, (scalateOverwrite in Compile).value, (scalateTemplateConfig in Compile).value)
   }
 
@@ -127,7 +126,7 @@ object ScalatePlugin extends Plugin {
    */
   protected def withScalateClassLoader[A](runClassPath: Seq[File])(f: ClassLoader => A): A = {
     val oldLoader = Thread.currentThread.getContextClassLoader
-    val loader = ClasspathUtilities.toLoader(runClassPath)
+    val loader = Compat.ClasspathUtilities.toLoader(runClassPath)
     Thread.currentThread.setContextClassLoader(loader)
     try {
       f(loader)
