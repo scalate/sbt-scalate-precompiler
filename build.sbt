@@ -1,13 +1,13 @@
 lazy val precompiler = (project in file("precompiler")).settings(baseSettings).settings(
   name := "scalate-precompiler",
-  libraryDependencies += "org.scalatra.scalate" %% "scalate-core" % "1.8.0" % "compile"
-).settings(scalariformSettings)
+  libraryDependencies += "org.scalatra.scalate" %% "scalate-core" % "1.9.0-RC1" % "compile"
+)
 
 lazy val plugin = (project in file("plugin")).settings(baseSettings).settings(
   name := "sbt-scalate-precompiler",
   sbtPlugin := true,
-  crossSbtVersions := Seq("0.13.16", "1.0.2"),
-  sourceGenerators in Compile += Def.task{
+  crossSbtVersions := Seq("1.1.6"),
+  sourceGenerators in Compile += Def.task {
     val file = (sourceManaged in Compile).value / organization.value.replace(".","/") / "Version.scala"
     val code = {
 s"""package org.fusesource.scalate
@@ -20,11 +20,11 @@ object Version {
     IO.write(file, code)
     Seq(file)
   }.taskValue
-).settings(scalariformSettings)
+)
 
 lazy val baseSettings = Seq(
   organization := "org.scalatra.scalate",
-  version := "1.8.0.1",
+  version := "1.9.0.0-RC1",
   transitiveClassifiers in Global := Seq(Artifact.SourceClassifier),
   parallelExecution in Test := false,
   logBuffered in Test := false,
@@ -32,11 +32,11 @@ lazy val baseSettings = Seq(
   javacOptions ++= Seq("-target", "1.8", "-source", "1.8"),
   publishMavenStyle := true,
   pomIncludeRepository := { x => false },
-  publishTo := {
-    val nexus = "https://oss.sonatype.org/"
-    if (version.value.trim.endsWith("SNAPSHOT")) Some("snapshots" at nexus + "content/repositories/snapshots")
-    else Some("releases" at nexus + "service/local/staging/deploy/maven2")
-  },
+  resolvers += "sonatype releases" at "https://oss.sonatype.org/content/repositories/releases",
+  publishTo := Some(
+    if (isSnapshot.value) Opts.resolver.sonatypeSnapshots else Opts.resolver.sonatypeStaging
+  ),
+  publishConfiguration := publishConfiguration.value.withOverwrite(true),
   pomExtra := <url>https://github.com/scalate/sbt-scalate-precompiler</url>
   <licenses>
     <license>

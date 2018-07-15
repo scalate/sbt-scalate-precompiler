@@ -15,8 +15,7 @@ object ScalatePlugin extends AutoPlugin {
     importMembers: Boolean = false,
     defaultValue: String = "",
     kind: String = "val",
-    isImplicit: Boolean = false
-  )
+    isImplicit: Boolean = false)
 
   /**
    * Template Configuration
@@ -28,8 +27,7 @@ object ScalatePlugin extends AutoPlugin {
     scalateTemplateDirectory: File,
     scalateImports: Seq[String],
     scalateBindings: Seq[Binding],
-    packagePrefix: Option[String] = Some("scalate")
-  )
+    packagePrefix: Option[String] = Some("scalate"))
 
   val Scalate = config("scalate") hide
 
@@ -59,8 +57,7 @@ object ScalatePlugin extends AutoPlugin {
 
   final case class ScalateClasspaths(
     classpath: PathFinder,
-    scalateClasspath: PathFinder
-  )
+    scalateClasspath: PathFinder)
 
   def scalateClasspathsTask(cp: Classpath, scalateCp: Classpath) = ScalateClasspaths(cp.map(_.data), scalateCp.map(_.data))
 
@@ -92,8 +89,7 @@ object ScalatePlugin extends AutoPlugin {
             b.importMembers.asInstanceOf[AnyRef],
             b.defaultValue.asInstanceOf[AnyRef],
             b.kind.asInstanceOf[AnyRef],
-            b.isImplicit.asInstanceOf[AnyRef]
-          )
+            b.isImplicit.asInstanceOf[AnyRef])
 
         }
         try {
@@ -117,8 +113,7 @@ object ScalatePlugin extends AutoPlugin {
     watchSources ++= (scalateTemplateConfig in Compile).value.map(_.scalateTemplateDirectory).flatMap(d => (d ** "*").get),
     scalateOverwrite := true,
     managedClasspath in scalateClasspaths := Classpaths.managedJars(Scalate, classpathTypes.value, update.value),
-    scalateClasspaths := scalateClasspathsTask((fullClasspath in Runtime).value, (managedClasspath in scalateClasspaths).value)
-  )
+    scalateClasspaths := scalateClasspathsTask((fullClasspath in Runtime).value, (managedClasspath in scalateClasspaths).value))
 
   /**
    * Runs a block of code with the Scalate classpath as the context class loader.

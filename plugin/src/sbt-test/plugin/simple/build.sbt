@@ -2,7 +2,7 @@ import org.fusesource.scalate.ScalatePlugin._
 import ScalateKeys._
 
 version := "0.1"
-scalaVersion := "2.12.1"
+scalaVersion := "2.12.6"
 
 resolvers += Resolver.file("ivy-local", file(Path.userHome.absolutePath + "/.ivy2/local"))(Resolver.mavenStylePatterns)
 resolvers ++= Seq(
@@ -10,7 +10,7 @@ resolvers ++= Seq(
   "sonatype snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
 )
 
-libraryDependencies += "org.scalatra.scalate" %% "scalate-core" % "1.8.0" % "compile"
+libraryDependencies += "org.scalatra.scalate" %% "scalate-core" % "1.9.0-RC1" % "compile"
 
 scalateSettings
 scalateTemplateConfig in Compile := {
