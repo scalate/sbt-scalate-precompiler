@@ -1,6 +1,6 @@
 lazy val precompiler = (project in file("precompiler")).settings(baseSettings).settings(
   name := "scalate-precompiler",
-  libraryDependencies += "org.scalatra.scalate" %% "scalate-core" % "1.9.0-RC1" % "compile"
+  libraryDependencies += "org.scalatra.scalate" %% "scalate-core" % "1.9.0-RC2" % "compile"
 )
 
 lazy val plugin = (project in file("plugin")).settings(baseSettings).settings(
@@ -24,7 +24,7 @@ object Version {
 
 lazy val baseSettings = Seq(
   organization := "org.scalatra.scalate",
-  version := "1.9.0.0-RC1",
+  version := "1.9.0.0-RC2",
   transitiveClassifiers in Global := Seq(Artifact.SourceClassifier),
   parallelExecution in Test := false,
   logBuffered in Test := false,
