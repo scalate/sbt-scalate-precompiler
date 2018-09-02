@@ -18,10 +18,7 @@ addSbtPlugin("org.scalatra.scalate" % "sbt-scalate-precompiler" % "1.9.0.0")
 Configure the plugin in `build.sbt`:
 
 ```scala
-
-import ScalateKeys._
-
-scalateSettings
+import org.fusesource.scalate.ScalatePlugin._
       
 // Scalate Precompilation and Bindings
 scalateTemplateConfig in Compile <<= (sourceDirectory in Compile){ base =>
