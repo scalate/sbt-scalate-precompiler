@@ -21,7 +21,8 @@ Configure the plugin in `build.sbt`:
 import org.fusesource.scalate.ScalatePlugin._
       
 // Scalate Precompilation and Bindings
-scalateTemplateConfig in Compile <<= (sourceDirectory in Compile){ base =>
+scalateTemplateConfig in Compile := {
+  val base = (sourceDirectory in Compile).value
   Seq(
     TemplateConfig(
       base / "webapp" / "WEB-INF" / "webTmpl",
