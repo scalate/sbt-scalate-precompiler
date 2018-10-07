@@ -21,6 +21,8 @@ Configure the plugin in `build.sbt`:
 import org.fusesource.scalate.ScalatePlugin._
 import ScalateKeys._
 
+scalateSettings
+
 // Scalate Precompilation and Bindings
 scalateTemplateConfig in Compile := {
   val base = (sourceDirectory in Compile).value
