@@ -1,9 +1,9 @@
 #!/bin/bash
 
-sbt ++2.13.0-M4 \
+sbt ++2.13.0-M5 \
     precompiler/test \
     precompiler/publishLocal \
-    ++2.12.6 \
+    ++2.12.7 \
     precompiler/test \
     precompiler/publishLocal \
     ++2.11.12 \
