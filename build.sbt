@@ -1,14 +1,14 @@
 lazy val precompiler = (project in file("precompiler")).settings(baseSettings).settings(
   sbtPlugin := false,
   name := "scalate-precompiler",
-  libraryDependencies += "org.scalatra.scalate" %% "scalate-core" % "1.9.1-RC1" % "compile",
+  libraryDependencies += "org.scalatra.scalate" %% "scalate-core" % "1.9.1" % "compile",
   crossScalaVersions := Seq("2.13.0-M5", "2.12.7", "2.11.12")
 ).disablePlugins(ScriptedPlugin)
 
 lazy val plugin = (project in file("plugin")).settings(baseSettings).settings(
   name := "sbt-scalate-precompiler",
   sbtPlugin := true,
-  crossSbtVersions := Seq("1.2.4"),
+  crossSbtVersions := Seq("1.2.8"),
   sourceGenerators in Compile += Def.task {
     val file = (sourceManaged in Compile).value / organization.value.replace(".","/") / "Version.scala"
     val code = {
@@ -26,7 +26,7 @@ object Version {
 
 lazy val baseSettings = Seq(
   organization := "org.scalatra.scalate",
-  version := "1.9.1.0-RC1",
+  version := "1.9.1.0",
   transitiveClassifiers in Global := Seq(Artifact.SourceClassifier),
   parallelExecution in Test := false,
   logBuffered in Test := false,
