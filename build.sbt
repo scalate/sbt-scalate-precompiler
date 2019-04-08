@@ -1,8 +1,8 @@
 lazy val precompiler = (project in file("precompiler")).settings(baseSettings).settings(
   sbtPlugin := false,
   name := "scalate-precompiler",
-  libraryDependencies += "org.scalatra.scalate" %% "scalate-core" % "1.9.1" % "compile",
-  crossScalaVersions := Seq("2.13.0-M5", "2.12.7", "2.11.12")
+  libraryDependencies += "org.scalatra.scalate" %% "scalate-core" % "1.9.2" % "compile",
+  crossScalaVersions := Seq("2.13.0-RC1", "2.12.8", "2.11.12")
 ).disablePlugins(ScriptedPlugin)
 
 lazy val plugin = (project in file("plugin")).settings(baseSettings).settings(
@@ -26,7 +26,7 @@ object Version {
 
 lazy val baseSettings = Seq(
   organization := "org.scalatra.scalate",
-  version := "1.9.1.0",
+  version := "1.9.2.0",
   transitiveClassifiers in Global := Seq(Artifact.SourceClassifier),
   parallelExecution in Test := false,
   logBuffered in Test := false,
@@ -34,7 +34,7 @@ lazy val baseSettings = Seq(
   javacOptions ++= Seq("-target", "1.8", "-source", "1.8"),
   publishMavenStyle := true,
   pomIncludeRepository := { x => false },
-  resolvers += "sonatype releases" at "https://oss.sonatype.org/content/repositories/releases",
+  resolvers += "sonatype staging" at "https://oss.sonatype.org/content/repositories/staging",
   publishTo := Some(
     if (isSnapshot.value) Opts.resolver.sonatypeSnapshots else Opts.resolver.sonatypeStaging
   ),
