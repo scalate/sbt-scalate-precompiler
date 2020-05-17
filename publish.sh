@@ -4,10 +4,10 @@ sbt \
     ++2.11.12 \
     clean \
     publishSigned \
-    ++2.12.10 \
+    ++2.12.11 \
     clean \
     publishSigned \
-    ++2.13.1 \
+    ++2.13.2 \
     clean \
     publishSigned \
     "project plugin" \
