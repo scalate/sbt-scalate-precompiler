@@ -1,0 +1,27 @@
+name: CI
+on:
+  push:
+  pull_request:
+  schedule:
+  - cron: '0 1 * * 6'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        java: [8, 11]
+    steps:
+    - uses: actions/checkout@v2.3.4
+    - uses: olafurpg/setup-scala@v10
+      with:
+        java-version: "adopt@1.${{ matrix.java }}"
+    - run: sbt -v
+           "project precompiler"
+           "+ test"
+           "+ publishLocal"
+           "project plugin"
+           "^ publishLocal"
+           "^ scripted"
+    - run: rm -rf ~/.ivy2/local

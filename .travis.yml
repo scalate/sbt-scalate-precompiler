@@ -1,7 +1,0 @@
-language: scala
-sudo: false
-dist: trusty
-jdk:
-  - oraclejdk8
-  - openjdk11
-script: "./travis.sh"
