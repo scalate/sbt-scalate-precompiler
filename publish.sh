@@ -4,7 +4,7 @@ sbt \
     ++2.11.12 \
     clean \
     publishSigned \
-    ++2.12.14 \
+    ++2.12.15 \
     clean \
     publishSigned \
     ++2.13.6 \
