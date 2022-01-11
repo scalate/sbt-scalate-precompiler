@@ -7,7 +7,7 @@ sbt \
     ++2.12.15 \
     clean \
     publishSigned \
-    ++2.13.7 \
+    ++2.13.8 \
     clean \
     publishSigned \
     "project plugin" \
