@@ -26,7 +26,7 @@ object Version {
 
 lazy val baseSettings = Seq(
   organization := "org.scalatra.scalate",
-  version := "1.9.6.0",
+  version := "1.9.7.0",
   transitiveClassifiers in Global := Seq(Artifact.SourceClassifier),
   parallelExecution in Test := false,
   logBuffered in Test := false,
