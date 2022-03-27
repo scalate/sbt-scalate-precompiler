@@ -1,7 +1,7 @@
 lazy val precompiler = (project in file("precompiler")).settings(baseSettings).settings(
   sbtPlugin := false,
   name := "scalate-precompiler",
-  libraryDependencies += "org.scalatra.scalate" %% "scalate-core" % "1.9.7" % "compile",
+  libraryDependencies += "org.scalatra.scalate" %% "scalate-core" % "1.9.8" % "compile",
   crossScalaVersions := Seq("2.13.8", "2.12.15", "2.11.12")
 ).disablePlugins(ScriptedPlugin)
 
