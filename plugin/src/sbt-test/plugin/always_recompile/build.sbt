@@ -1,22 +1,17 @@
 import org.fusesource.scalate.ScalatePlugin._
 import ScalateKeys._
 
-version := "0.1"
-scalaVersion := "2.12.6"
+scalaVersion := "2.12.8"
 
 resolvers += Resolver.file("ivy-local", file(Path.userHome.absolutePath + "/.ivy2/local"))(Resolver.mavenStylePatterns)
-resolvers ++= Seq(
-  "sonatype releases"  at "https://oss.sonatype.org/content/repositories/releases",
-  "sonatype snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
-)
 
-libraryDependencies += "org.scalatra.scalate" %% "scalate-core" % "1.9.0-RC1" % "compile"
+libraryDependencies += "org.scalatra.scalate" %% "scalate-core" % "1.9.8" % "compile"
 
 scalateSettings ++ Seq(
   scalateOverwrite := true
 )
-scalateTemplateConfig in Compile := {
-  val base = (sourceDirectory in Compile).value
+Compile / scalateTemplateConfig := {
+  val base = (Compile / sourceDirectory).value
   Seq(
     TemplateConfig(
       base / "templates",
@@ -27,13 +22,13 @@ scalateTemplateConfig in Compile := {
 }
 
 TaskKey[Unit]("recordModifiedTime") := {
-  val base = (sourceManaged in Compile).value
+  val base = (Compile / sourceManaged).value
   val recorded = base / "index_ssp.scala"
   IO.touch(recorded, true)
 }
 
 TaskKey[Unit]("checkCompiled") := {
-  val base = (sourceManaged in Compile).value
+  val base = (Compile / sourceManaged).value
   val generated = base / "scalate" / "templates" / "index_ssp.scala"
   if (!generated.exists) {
     sys.error(s"${generated.getAbsolutePath} doesn't exist.")
@@ -42,7 +37,7 @@ TaskKey[Unit]("checkCompiled") := {
 }
 
 TaskKey[Unit]("checkRecompiled") := {
-  val base = (sourceManaged in Compile).value
+  val base = (Compile / sourceManaged).value
   val recorded = base / "index_ssp.scala"
   val generated = base / "scalate" / "templates" / "index_ssp.scala"
   if (!generated.exists) {

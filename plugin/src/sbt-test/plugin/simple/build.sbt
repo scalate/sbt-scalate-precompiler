@@ -1,20 +1,15 @@
 import org.fusesource.scalate.ScalatePlugin._
 import ScalateKeys._
 
-version := "0.1"
-scalaVersion := "2.12.6"
+scalaVersion := "2.12.8"
 
 resolvers += Resolver.file("ivy-local", file(Path.userHome.absolutePath + "/.ivy2/local"))(Resolver.mavenStylePatterns)
-resolvers ++= Seq(
-  "sonatype releases"  at "https://oss.sonatype.org/content/repositories/releases",
-  "sonatype snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
-)
 
-libraryDependencies += "org.scalatra.scalate" %% "scalate-core" % "1.9.0-RC1" % "compile"
+libraryDependencies += "org.scalatra.scalate" %% "scalate-core" % "1.9.8" % "compile"
 
 scalateSettings
-scalateTemplateConfig in Compile := {
-  val base = (sourceDirectory in Compile).value
+Compile / scalateTemplateConfig := {
+  val base = (Compile / sourceDirectory).value
   Seq(
     TemplateConfig(
       base / "templates",
@@ -24,7 +19,7 @@ scalateTemplateConfig in Compile := {
   )
 }
 TaskKey[Unit]("check") := {
-  val outputDir = (sourceManaged in Compile).value
+  val outputDir = (Compile / sourceManaged).value
   val scalaFile = outputDir / "scalate" / "templates" / "index_ssp.scala"
   if (!scalaFile.exists) {
     sys.error(s"${scalaFile.getAbsolutePath} doesn't exist.")
