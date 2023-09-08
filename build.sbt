@@ -2,15 +2,15 @@ lazy val precompiler = (project in file("precompiler")).settings(baseSettings).s
   sbtPlugin := false,
   name := "scalate-precompiler",
   libraryDependencies += "org.scalatra.scalate" %% "scalate-core" % "1.9.8" % "compile",
-  crossScalaVersions := Seq("2.13.11", "2.12.16", "2.11.12")
+  crossScalaVersions := Seq("2.13.12", "2.12.16", "2.11.12")
 ).disablePlugins(ScriptedPlugin)
 
 lazy val plugin = (project in file("plugin")).settings(baseSettings).settings(
   name := "sbt-scalate-precompiler",
   sbtPlugin := true,
   crossSbtVersions := Seq("1.3.10"),
-  sourceGenerators in Compile += Def.task {
-    val file = (sourceManaged in Compile).value / organization.value.replace(".","/") / "Version.scala"
+  Compile / sourceGenerators += Def.task {
+    val file = (Compile / sourceManaged).value / organization.value.replace(".","/") / "Version.scala"
     val code = {
 s"""package org.fusesource.scalate
 object Version {
@@ -27,9 +27,9 @@ object Version {
 lazy val baseSettings = Seq(
   organization := "org.scalatra.scalate",
   version := "1.9.7.0",
-  transitiveClassifiers in Global := Seq(Artifact.SourceClassifier),
-  parallelExecution in Test := false,
-  logBuffered in Test := false,
+  Global / transitiveClassifiers := Seq(Artifact.SourceClassifier),
+  Test / parallelExecution := false,
+  Test / logBuffered := false,
   scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature"),
   javacOptions ++= Seq("-target", "1.8", "-source", "1.8"),
   publishMavenStyle := true,
