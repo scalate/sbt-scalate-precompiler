@@ -1,13 +1,13 @@
 #!/bin/bash
 sbt \
     "project precompiler" \
-    ++2.11.12 \
+    ++2.11.x \
     clean \
     publishSigned \
-    ++2.12.16 \
+    ++2.12.x \
     clean \
     publishSigned \
-    ++2.13.13 \
+    ++2.13.x \
     clean \
     publishSigned \
     "project plugin" \
