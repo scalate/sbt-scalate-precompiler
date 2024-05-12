@@ -5,7 +5,7 @@ scalaVersion := "2.12.8"
 
 resolvers += Resolver.file("ivy-local", file(Path.userHome.absolutePath + "/.ivy2/local"))(Resolver.mavenStylePatterns)
 
-libraryDependencies += "org.scalatra.scalate" %% "scalate-core" % "1.9.8" % "compile"
+libraryDependencies += "org.scalatra.scalate" %% "scalate-core" % "1.10.1" % "compile"
 
 scalateSettings ++ Seq(
   scalateOverwrite := false
