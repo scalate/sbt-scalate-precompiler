@@ -1,9 +1,7 @@
 import org.fusesource.scalate.ScalatePlugin._
 import ScalateKeys._
 
-scalaVersion := "2.12.8"
-
-resolvers += Resolver.file("ivy-local", file(Path.userHome.absolutePath + "/.ivy2/local"))(Resolver.mavenStylePatterns)
+scalaVersion := "2.12.20"
 
 libraryDependencies += "org.scalatra.scalate" %% "scalate-core" % "1.10.1" % "compile"
 

@@ -10,7 +10,7 @@ This plugin is published to sonatype oss repository.
 Include the plugin in `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.scalatra.scalate" % "sbt-scalate-precompiler" % "1.9.6.0")
+addSbtPlugin("org.scalatra.scalate" % "sbt-scalate-precompiler" % "1.10.0.0")
 ```
 
 Configure the plugin in `build.sbt`:
