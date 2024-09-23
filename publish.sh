@@ -10,6 +10,9 @@ sbt \
     ++2.13.x \
     clean \
     publishSigned \
+    ++3.3.x \
+    clean \
+    publishSigned \
     "project plugin" \
     clean \
     publishSigned

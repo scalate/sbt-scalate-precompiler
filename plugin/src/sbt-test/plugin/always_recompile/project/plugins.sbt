@@ -1,5 +1,3 @@
-resolvers += Resolver.file("ivy-local", file(Path.userHome.absolutePath + "/.ivy2/local"))(Resolver.mavenStylePatterns)
-
 {
   val pluginVersion = System.getProperty("plugin.version")
   if (pluginVersion == null) {

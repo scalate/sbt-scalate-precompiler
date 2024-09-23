@@ -41,7 +41,7 @@ object ScalatePlugin extends AutoPlugin {
   import ScalateKeys._
 
   def scalateSourceGeneratorTask: Initialize[Task[Seq[File]]] = Def.task {
-    generateScalateSource(streams.value, new File((sourceManaged in Compile).value, "scalate"), (scalateLoggingConfig in Compile).value, (managedClasspath in scalateClasspaths).value, (scalateOverwrite in Compile).value, (scalateTemplateConfig in Compile).value)
+    generateScalateSource(streams.value, new File((Compile / sourceManaged).value, "scalate"), (Compile / scalateLoggingConfig).value, (scalateClasspaths / managedClasspath).value, (Compile / scalateOverwrite).value, (Compile / scalateTemplateConfig).value)
   }
 
   type Generator = {
@@ -67,8 +67,8 @@ object ScalatePlugin extends AutoPlugin {
 
         val className = "org.fusesource.scalate.Precompiler"
         val klass = classLoader.loadClass(className)
-        val inst = klass.newInstance
-        val generator = klass.newInstance.asInstanceOf[Generator]
+        val inst = klass.getDeclaredConstructor().newInstance()
+        val generator = klass.getDeclaredConstructor().newInstance().asInstanceOf[Generator]
 
         val source = t.scalateTemplateDirectory
         out.log.info("Compiling Templates in Template Directory: %s" format t.scalateTemplateDirectory.getAbsolutePath)
@@ -106,14 +106,14 @@ object ScalatePlugin extends AutoPlugin {
 
   val scalateSettings: Seq[sbt.Def.Setting[_]] = Seq(
     ivyConfigurations += Scalate,
-    scalateTemplateConfig in Compile := Seq(TemplateConfig(file(".") / "src" / "main" / "webapp" / "WEB-INF", Nil, Nil, Some("scalate"))),
-    scalateLoggingConfig in Compile := (resourceDirectory in Compile).value / "logback.xml",
+    Compile / scalateTemplateConfig := Seq(TemplateConfig(file(".") / "src" / "main" / "webapp" / "WEB-INF", Nil, Nil, Some("scalate"))),
+    Compile / scalateLoggingConfig := (Compile / resourceDirectory).value / "logback.xml",
     libraryDependencies += "org.scalatra.scalate" %% "scalate-precompiler" % Version.version % Scalate.name,
-    sourceGenerators in Compile += scalateSourceGeneratorTask.taskValue,
-    watchSources ++= (scalateTemplateConfig in Compile).value.map(_.scalateTemplateDirectory).flatMap(d => (d ** "*").get),
+    Compile / sourceGenerators += scalateSourceGeneratorTask.taskValue,
+    watchSources ++= (Compile / scalateTemplateConfig).value.map(_.scalateTemplateDirectory).flatMap(d => (d ** "*").get),
     scalateOverwrite := true,
-    managedClasspath in scalateClasspaths := Classpaths.managedJars(Scalate, classpathTypes.value, update.value),
-    scalateClasspaths := scalateClasspathsTask((fullClasspath in Runtime).value, (managedClasspath in scalateClasspaths).value))
+    scalateClasspaths / managedClasspath := Classpaths.managedJars(Scalate, classpathTypes.value, update.value),
+    scalateClasspaths := scalateClasspathsTask((Runtime / fullClasspath).value, (scalateClasspaths / managedClasspath).value))
 
   /**
    * Runs a block of code with the Scalate classpath as the context class loader.
