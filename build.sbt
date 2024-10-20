@@ -34,9 +34,8 @@ lazy val baseSettings = Seq(
   javacOptions ++= Seq("-target", "1.8", "-source", "1.8"),
   publishMavenStyle := true,
   pomIncludeRepository := { x => false },
-  resolvers += "sonatype staging" at "https://oss.sonatype.org/content/repositories/staging",
-  publishTo := Some(
-    if (isSnapshot.value) Opts.resolver.sonatypeSnapshots else Opts.resolver.sonatypeStaging
+  publishTo := (
+    if (isSnapshot.value) None else Some(Opts.resolver.sonatypeStaging)
   ),
   publishConfiguration := publishConfiguration.value.withOverwrite(true),
   pomExtra := <url>https://github.com/scalate/sbt-scalate-precompiler</url>
