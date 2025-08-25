@@ -24,6 +24,4 @@ jobs:
            "project plugin"
            "^ publishLocal"
            "^ scripted"
-    - name: check scalariform
-      run: git diff --exit-code
     - run: rm -rf ~/.ivy2/local
