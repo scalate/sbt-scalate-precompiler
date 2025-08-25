@@ -110,7 +110,7 @@ object ScalatePlugin extends AutoPlugin {
     Compile / scalateLoggingConfig := (Compile / resourceDirectory).value / "logback.xml",
     libraryDependencies += "org.scalatra.scalate" %% "scalate-precompiler" % Version.version % Scalate.name,
     Compile / sourceGenerators += scalateSourceGeneratorTask.taskValue,
-    watchSources ++= (Compile / scalateTemplateConfig).value.map(_.scalateTemplateDirectory).flatMap(d => (d ** "*").get),
+    watchSources ++= (Compile / scalateTemplateConfig).value.map(_.scalateTemplateDirectory).flatMap(d => (d ** "*").get()),
     scalateOverwrite := true,
     scalateClasspaths / managedClasspath := Classpaths.managedJars(Scalate, classpathTypes.value, update.value),
     scalateClasspaths := scalateClasspathsTask((Runtime / fullClasspath).value, (scalateClasspaths / managedClasspath).value))
