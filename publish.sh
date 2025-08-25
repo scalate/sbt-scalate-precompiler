@@ -1,9 +1,6 @@
 #!/bin/bash
 sbt \
     "project precompiler" \
-    ++2.11.x \
-    clean \
-    publishSigned \
     ++2.12.x \
     clean \
     publishSigned \
