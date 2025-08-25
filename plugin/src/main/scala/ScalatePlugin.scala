@@ -105,7 +105,7 @@ object ScalatePlugin extends AutoPlugin {
     }
   }
 
-  val scalateSettings: Seq[sbt.Def.Setting[_]] = Seq(
+  val scalateSettings: Seq[sbt.Def.Setting[?]] = Seq(
     ivyConfigurations += Scalate,
     Compile / scalateTemplateConfig := Seq(TemplateConfig(file(".") / "src" / "main" / "webapp" / "WEB-INF", Nil, Nil, Some("scalate"))),
     Compile / scalateLoggingConfig := (Compile / resourceDirectory).value / "logback.xml",
