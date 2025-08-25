@@ -3,6 +3,7 @@ package org.fusesource.scalate
 import scala.language.reflectiveCalls
 import scala.language.postfixOps
 import sbt._
+import sbt.internal.inc.classpath.ClasspathUtilities
 import Keys._
 import Def.Initialize
 import java.io.File
@@ -121,7 +122,7 @@ object ScalatePlugin extends AutoPlugin {
    */
   protected def withScalateClassLoader[A](runClassPath: Seq[File])(f: ClassLoader => A): A = {
     val oldLoader = Thread.currentThread.getContextClassLoader
-    val loader = Compat.ClasspathUtilities.toLoader(runClassPath)
+    val loader = ClasspathUtilities.toLoader(runClassPath)
     Thread.currentThread.setContextClassLoader(loader)
     try {
       f(loader)
