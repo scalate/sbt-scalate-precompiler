@@ -1,7 +1,7 @@
 import org.fusesource.scalate.ScalatePlugin._
 import ScalateKeys._
 
-scalaVersion := "2.12.20"
+scalaVersion := "2.12.21"
 
 libraryDependencies += "org.scalatra.scalate" %% "scalate-core" % "1.10.1" % "compile"
 
