@@ -22,8 +22,8 @@ import ScalateKeys._
 scalateSettings
 
 // Scalate Precompilation and Bindings
-scalateTemplateConfig in Compile := {
-  val base = (sourceDirectory in Compile).value
+Compile / scalateTemplateConfig := {
+  val base = (Compile / sourceDirectory).value
   Seq(
     TemplateConfig(
       base / "webapp" / "WEB-INF" / "webTmpl",
@@ -85,7 +85,8 @@ object build extends Build {
      * or a compiled scala file corresponding to a template file doesn't exist yet.
      */
     scalateOverwrite := true,
-    scalateTemplateConfig in Compile <<= (baseDirectory) { base =>
+    Compile / scalateTemplateConfig := {
+      val base = baseDirectory.value
       Seq(
         /**
          * A minimal template configuration example.
@@ -106,7 +107,7 @@ object build extends Build {
     }
   )
 
-  lazy val root = Project("root", file(".")).settings(templateSettings:_*)
+  lazy val root = Project("root", file(".")).settings(templateSettings)
 }
 
 ```
@@ -117,7 +118,7 @@ From version 0.2.2 onwards the plugin detects when sources are changed and will 
 Older versions can add this to their build.sbt:
 
 ```scala
-watchSources <++= (scalateTemplateDirectory in Compile) map (d => (d ** "*").get)
+watchSources ++= ((Compile / scalateTemplateDirectory).value ** "*").get()
 ```
 
 ### To use multiiple template directories with scalatra you'll need to make some changes too: 
