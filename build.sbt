@@ -1,14 +1,23 @@
-lazy val precompiler = (project in file("precompiler"))
+def Scala3 = "3.3.7"
+def Scala213 = "2.13.18"
+def Scala212 = "2.12.21"
+
+lazy val precompiler = projectMatrix
+  .in(file("precompiler"))
+  .defaultAxes(VirtualAxis.jvm)
+  .jvmPlatform(scalaVersions = Seq(Scala212, Scala213, Scala3))
   .settings(baseSettings)
   .settings(
     sbtPlugin := false,
     name := "scalate-precompiler",
     libraryDependencies += "io.github.scalate" %% "scalate-core" % "1.11.0",
-    crossScalaVersions := Seq("3.3.7", "2.13.18", "2.12.21")
   )
   .disablePlugins(ScriptedPlugin)
 
-lazy val plugin = (project in file("plugin"))
+lazy val plugin = projectMatrix
+  .in(file("plugin"))
+  .defaultAxes(VirtualAxis.jvm)
+  .jvmPlatform(scalaVersions = Seq(Scala212))
   .settings(baseSettings)
   .settings(
     name := "sbt-scalate-precompiler",
@@ -97,3 +106,6 @@ lazy val baseSettings = Seq(
     </developer>
   </developers>
 )
+
+publish / skip := true
+autoScalaLibrary := false
