@@ -18,7 +18,7 @@ Compile / scalateTemplateConfig := {
     )
   )
 }
-TaskKey[Unit]("check") := {
+InputKey[Unit]("check") := {
   val outputDir = (Compile / sourceManaged).value
   val scalaFile = outputDir / "scalate" / "templates" / "index_ssp.scala"
   if (!scalaFile.exists) {

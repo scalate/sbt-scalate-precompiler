@@ -4,10 +4,13 @@ import scala.language.reflectiveCalls
 import sbt.*
 import sbt.internal.inc.classpath.ClasspathUtilities
 import Keys.*
-import Def.Initialize
+import sbt.Def.Initialize
+import xsbti.FileConverter
 import java.io.File
+import scala.jdk.CollectionConverters.*
+import sbtcompat.PluginCompat.*
 
-object ScalatePlugin extends AutoPlugin {
+object ScalatePlugin extends AutoPlugin with ScalatePluginCompat {
 
   case class Binding(
     name: String,
@@ -37,12 +40,14 @@ object ScalatePlugin extends AutoPlugin {
       settingKey[File]("Logback config to get rid of that infernal debug output.")
     val scalateOverwrite =
       settingKey[Boolean]("Always generate the Scala sources even when they haven't changed")
+    @transient
     val scalateClasspaths = taskKey[ScalateClasspaths]("")
   }
 
   import ScalateKeys.*
 
   def scalateSourceGeneratorTask: Initialize[Task[Seq[File]]] = Def.task {
+    implicit val converter: FileConverter = fileConverter.value
     generateScalateSource(
       streams.value,
       new File((Compile / sourceManaged).value, "scalate"),
@@ -59,15 +64,19 @@ object ScalatePlugin extends AutoPlugin {
     var targetDirectory: File
     var logConfig: File
     var overwrite: Boolean
-    var scalateImports: Array[String]
-    var scalateBindings: Array[Array[AnyRef]]
-    def execute: Array[File]
+    var scalateImports: java.util.List[String]
+    var scalateBindings: java.util.List[java.util.List[AnyRef]]
+    def execute(): java.util.List[File]
   }
 
   final case class ScalateClasspaths(classpath: PathFinder, scalateClasspath: PathFinder)
 
-  def scalateClasspathsTask(cp: Classpath, scalateCp: Classpath) =
-    ScalateClasspaths(cp.map(_.data), scalateCp.map(_.data))
+  def scalateClasspathsTask(cp: Classpath, scalateCp: Classpath)(implicit converter: FileConverter) = {
+    ScalateClasspaths(
+      cp.map(_.data).map(sbtcompat.PluginCompat.toFile),
+      scalateCp.map(_.data).map(sbtcompat.PluginCompat.toFile)
+    )
+  }
 
   def generateScalateSource(
     out: TaskStreams,
@@ -76,8 +85,8 @@ object ScalatePlugin extends AutoPlugin {
     cp: Classpath,
     overwrite: Boolean,
     templates: Seq[TemplateConfig]
-  ) = {
-    withScalateClassLoader(cp.files) { classLoader =>
+  )(implicit converter: FileConverter): Seq[File] = {
+    withScalateClassLoader(classpathToFiles(cp)) { classLoader =>
       templates flatMap { t =>
         val className = "org.fusesource.scalate.Precompiler"
         val klass = classLoader.loadClass(className)
@@ -94,9 +103,9 @@ object ScalatePlugin extends AutoPlugin {
         generator.targetDirectory = targetDirectory
         generator.logConfig = logConfig
         generator.overwrite = overwrite
-        generator.scalateImports = t.scalateImports.toArray
-        generator.scalateBindings = t.scalateBindings.toArray map { b =>
-          Array(
+        generator.scalateImports = java.util.Arrays.asList(t.scalateImports*)
+        generator.scalateBindings = java.util.Arrays.asList(t.scalateBindings.map { b =>
+          java.util.Arrays.asList(
             b.name.asInstanceOf[AnyRef],
             b.className.asInstanceOf[AnyRef],
             b.importMembers.asInstanceOf[AnyRef],
@@ -104,10 +113,9 @@ object ScalatePlugin extends AutoPlugin {
             b.kind.asInstanceOf[AnyRef],
             b.isImplicit.asInstanceOf[AnyRef]
           )
-
-        }
+        }*)
         try {
-          generator.execute.toList
+          generator.execute().asScala.toList
         } finally {
           preservedLogbackConfiguration match {
             case Some(oldConfig) => System.setProperty("logback.configurationFile", oldConfig)
@@ -126,15 +134,22 @@ object ScalatePlugin extends AutoPlugin {
     Compile / scalateLoggingConfig := (Compile / resourceDirectory).value / "logback.xml",
     libraryDependencies += "io.github.scalate" %% "scalate-precompiler" % Version.version % Scalate.name,
     Compile / sourceGenerators += scalateSourceGeneratorTask.taskValue,
-    watchSources ++= (Compile / scalateTemplateConfig).value
-      .map(_.scalateTemplateDirectory)
-      .flatMap(d => (d ** "*").get()),
+    watchSources ++= Def.uncached(
+      (Compile / scalateTemplateConfig).value
+        .map(_.scalateTemplateDirectory)
+        .flatMap(d => (d ** "*").get())
+    ),
     scalateOverwrite := true,
-    scalateClasspaths / managedClasspath := Classpaths.managedJars(Scalate, classpathTypes.value, update.value),
-    scalateClasspaths := scalateClasspathsTask(
-      (Runtime / fullClasspath).value,
-      (scalateClasspaths / managedClasspath).value
-    )
+    scalateClasspaths / managedClasspath := Def.uncached(
+      managedJarsCompat(Scalate, classpathTypes.value, update.value)
+    ),
+    scalateClasspaths := {
+      implicit val converter: FileConverter = fileConverter.value
+      scalateClasspathsTask(
+        (Runtime / fullClasspath).value,
+        (scalateClasspaths / managedClasspath).value
+      )
+    }
   )
 
   /**

@@ -2,6 +2,7 @@ package org.fusesource.scalate
 
 import org.fusesource.scalate.util.IOUtil
 import java.io.File
+import scala.jdk.CollectionConverters.*
 
 /**
  * Uses the Scalate template engine to generate Scala source files for Scalate templates.
@@ -12,32 +13,33 @@ class Precompiler {
   var targetDirectory: File = _
   var logConfig: File = _
   var overwrite: Boolean = _
-  var scalateImports: Array[String] = Array.empty
-  var scalateBindings: Array[Array[AnyRef]] = Array.empty // weird structure to represent Scalate Binding
+  var scalateImports: java.util.List[String] = java.util.Collections.emptyList()
+  var scalateBindings: java.util.List[java.util.List[AnyRef]] =
+    java.util.Collections.emptyList() // weird structure to represent Scalate Binding
   var packagePrefix: String = _
 
   lazy val engine = {
     val e = new TemplateEngine
 
     // initialize template engine
-    e.importStatements = scalateImports.toList
-    e.bindings = (scalateBindings.toList map { b =>
+    e.importStatements = scalateImports.asScala.toList
+    e.bindings = (scalateBindings.asScala.toList map { b =>
       Binding(
-        b(0).asInstanceOf[String],
-        b(1).asInstanceOf[String],
-        b(2).asInstanceOf[Boolean],
-        (b(3) match {
+        b.get(0).asInstanceOf[String],
+        b.get(1).asInstanceOf[String],
+        b.get(2).asInstanceOf[Boolean],
+        (b.get(3) match {
           case null | "" => None
           case a => Some(a.toString)
         }),
-        b(4).asInstanceOf[String],
-        b(5).asInstanceOf[Boolean]
+        b.get(4).asInstanceOf[String],
+        b.get(5).asInstanceOf[Boolean]
       )
     }) ::: e.bindings
     e
   }
 
-  def execute: Array[File] = {
+  def execute: java.util.List[File] = {
     System.setProperty("logback.configurationFile", logConfig.toString)
 
     if (sources == null) {
@@ -75,7 +77,7 @@ class Precompiler {
         scalaFile.getParentFile.mkdirs
         IOUtil.writeBinaryFile(scalaFile, code.getBytes("UTF-8"))
         scalaFile
-    }.toArray
+    }.asJava
   }
 
   private def collectCompileTargets(basedir: File, baseuri: String, extension: String): List[CompileTarget] = {
