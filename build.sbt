@@ -9,6 +9,7 @@ lazy val precompiler = projectMatrix
   .settings(baseSettings)
   .settings(
     sbtPlugin := false,
+    scalacOptions += "-release:8",
     name := "scalate-precompiler",
     libraryDependencies += "io.github.scalate" %% "scalate-core" % "1.11.0",
   )
@@ -22,6 +23,16 @@ lazy val plugin = projectMatrix
   .settings(
     name := "sbt-scalate-precompiler",
     sbtPlugin := true,
+    scalacOptions ++= {
+      scalaBinaryVersion.value match {
+        case "3" =>
+          Nil
+        case _ =>
+          Seq(
+            "-release:8",
+          )
+      }
+    },
     crossSbtVersions := Seq("1.9.9"),
     scriptedLaunchOpts ++= Seq(
       "-Xmx1024M",
