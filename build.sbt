@@ -35,7 +35,7 @@ lazy val baseSettings = Seq(
   publishMavenStyle := true,
   pomIncludeRepository := { x => false },
   publishTo := (
-    if (isSnapshot.value) None else Some(Opts.resolver.sonatypeStaging)
+    if (isSnapshot.value) None else localStaging.value
   ),
   publishConfiguration := publishConfiguration.value.withOverwrite(true),
   pomExtra := <url>https://github.com/scalate/sbt-scalate-precompiler</url>
