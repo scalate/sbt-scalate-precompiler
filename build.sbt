@@ -14,6 +14,11 @@ lazy val plugin = (project in file("plugin"))
     name := "sbt-scalate-precompiler",
     sbtPlugin := true,
     crossSbtVersions := Seq("1.9.9"),
+    scriptedLaunchOpts ++= Seq(
+      "-Xmx1024M",
+      "-Dplugin.version=" + version.value,
+    ),
+    scriptedBufferLog := false,
     Compile / sourceGenerators += Def.task {
       val file = (Compile / sourceManaged).value / organization.value.replace(".", "/") / "Version.scala"
       val code = {
