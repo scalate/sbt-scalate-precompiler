@@ -31,6 +31,20 @@ lazy val baseSettings = Seq(
   Test / parallelExecution := false,
   Test / logBuffered := false,
   scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature"),
+  scalacOptions ++= {
+    scalaBinaryVersion.value match {
+      case "2.12" =>
+        Seq(
+          "-Xsource:3",
+        )
+      case "2.13" =>
+        Seq(
+          "-Xsource:3-cross",
+        )
+      case "3" =>
+        Nil
+    }
+  },
   javacOptions ++= Seq("-target", "1.8", "-source", "1.8"),
   publishMavenStyle := true,
   pomIncludeRepository := { x => false },
