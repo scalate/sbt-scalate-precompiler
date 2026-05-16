@@ -21,6 +21,8 @@ jobs:
         distribution: adopt
     - uses: sbt/setup-sbt@v1
     - run: sbt -v
+           scalafmtSbtCheck
+           "+ scalafmtCheckAll"
            "project precompiler"
            "+ test"
            "+ publishLocal"

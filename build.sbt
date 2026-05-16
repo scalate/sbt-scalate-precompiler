@@ -1,28 +1,34 @@
-lazy val precompiler = (project in file("precompiler")).settings(baseSettings).settings(
-  sbtPlugin := false,
-  name := "scalate-precompiler",
-  libraryDependencies += "io.github.scalate" %% "scalate-core" % "1.11.0",
-  crossScalaVersions := Seq("3.3.7", "2.13.18", "2.12.21")
-).disablePlugins(ScriptedPlugin)
+lazy val precompiler = (project in file("precompiler"))
+  .settings(baseSettings)
+  .settings(
+    sbtPlugin := false,
+    name := "scalate-precompiler",
+    libraryDependencies += "io.github.scalate" %% "scalate-core" % "1.11.0",
+    crossScalaVersions := Seq("3.3.7", "2.13.18", "2.12.21")
+  )
+  .disablePlugins(ScriptedPlugin)
 
-lazy val plugin = (project in file("plugin")).settings(baseSettings).settings(
-  name := "sbt-scalate-precompiler",
-  sbtPlugin := true,
-  crossSbtVersions := Seq("1.9.9"),
-  Compile / sourceGenerators += Def.task {
-    val file = (Compile / sourceManaged).value / organization.value.replace(".","/") / "Version.scala"
-    val code = {
-s"""package org.fusesource.scalate
+lazy val plugin = (project in file("plugin"))
+  .settings(baseSettings)
+  .settings(
+    name := "sbt-scalate-precompiler",
+    sbtPlugin := true,
+    crossSbtVersions := Seq("1.9.9"),
+    Compile / sourceGenerators += Def.task {
+      val file = (Compile / sourceManaged).value / organization.value.replace(".", "/") / "Version.scala"
+      val code = {
+        s"""package org.fusesource.scalate
 object Version {
   val name    = "${name.value}"
   val version = "${version.value}"
 }
 """.stripMargin
-    }
-    IO.write(file, code)
-    Seq(file)
-  }.taskValue
-).enablePlugins(ScriptedPlugin)
+      }
+      IO.write(file, code)
+      Seq(file)
+    }.taskValue
+  )
+  .enablePlugins(ScriptedPlugin)
 
 lazy val baseSettings = Seq(
   organization := "io.github.scalate",
