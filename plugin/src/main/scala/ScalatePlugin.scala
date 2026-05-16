@@ -1,7 +1,6 @@
 package org.fusesource.scalate
 
 import scala.language.reflectiveCalls
-import scala.language.postfixOps
 import sbt.*
 import sbt.internal.inc.classpath.ClasspathUtilities
 import Keys.*
@@ -32,7 +31,7 @@ object ScalatePlugin extends AutoPlugin {
     packagePrefix: Option[String] = Some("scalate")
   )
 
-  val Scalate = config("scalate") hide
+  val Scalate = config("scalate").hide
 
   object ScalateKeys {
     val scalateTemplateConfig =
