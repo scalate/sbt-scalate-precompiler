@@ -1,3 +1,5 @@
+def sbt2 = "2.0.0-RC12"
+
 def Scala3 = "3.3.7"
 def Scala213 = "2.13.18"
 def Scala212 = "2.12.21"
@@ -18,11 +20,17 @@ lazy val precompiler = projectMatrix
 lazy val plugin = projectMatrix
   .in(file("plugin"))
   .defaultAxes(VirtualAxis.jvm)
-  .jvmPlatform(scalaVersions = Seq(Scala212))
+  .jvmPlatform(scalaVersions =
+    Seq(
+      Scala212,
+      scala_version_from_sbt_version.ScalaVersionFromSbtVersion(sbt2),
+    )
+  )
   .settings(baseSettings)
   .settings(
     name := "sbt-scalate-precompiler",
     sbtPlugin := true,
+    addSbtPlugin("com.github.sbt" % "sbt2-compat" % "0.1.0"),
     scalacOptions ++= {
       scalaBinaryVersion.value match {
         case "3" =>
@@ -33,7 +41,14 @@ lazy val plugin = projectMatrix
           )
       }
     },
-    crossSbtVersions := Seq("1.9.9"),
+    pluginCrossBuild / sbtVersion := {
+      scalaBinaryVersion.value match {
+        case "2.12" =>
+          "1.9.9"
+        case _ =>
+          sbt2
+      }
+    },
     scriptedLaunchOpts ++= Seq(
       "-Xmx1024M",
       "-Dplugin.version=" + version.value,

@@ -19,19 +19,19 @@ Compile / scalateTemplateConfig := {
   )
 }
 
-TaskKey[Unit]("recordModifiedTime") := {
+InputKey[Unit]("recordModifiedTime") := {
   val base = (Compile / sourceManaged).value
   val recorded = base / "index_ssp.scala"
   IO.touch(recorded, true)
 }
 
-TaskKey[Unit]("updateModifiedTime") := {
+InputKey[Unit]("updateModifiedTime") := {
   val base = (Compile / sourceManaged).value
   val generated = base / "scalate" / "templates" / "index_ssp.scala"
   IO.touch(generated, true)
 }
 
-TaskKey[Unit]("checkRecompiled") := {
+InputKey[Unit]("checkRecompiled") := {
   val base = (Compile / sourceManaged).value
   val recorded = base / "index_ssp.scala"
   val generated = base / "scalate" / "templates" / "index_ssp.scala"
@@ -44,7 +44,7 @@ TaskKey[Unit]("checkRecompiled") := {
   ()
 }
 
-TaskKey[Unit]("checkNotRecompiled") := {
+InputKey[Unit]("checkNotRecompiled") := {
   val base = (Compile / sourceManaged).value
   val generated = base / "scalate" / "templates" / "index_ssp.scala"
   val recorded = base / "index_ssp.scala"
