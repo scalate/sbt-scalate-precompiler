@@ -109,7 +109,7 @@ object ScalatePlugin extends AutoPlugin {
     ivyConfigurations += Scalate,
     Compile / scalateTemplateConfig := Seq(TemplateConfig(file(".") / "src" / "main" / "webapp" / "WEB-INF", Nil, Nil, Some("scalate"))),
     Compile / scalateLoggingConfig := (Compile / resourceDirectory).value / "logback.xml",
-    libraryDependencies += "org.scalatra.scalate" %% "scalate-precompiler" % Version.version % Scalate.name,
+    libraryDependencies += "io.github.scalate" %% "scalate-precompiler" % Version.version % Scalate.name,
     Compile / sourceGenerators += scalateSourceGeneratorTask.taskValue,
     watchSources ++= (Compile / scalateTemplateConfig).value.map(_.scalateTemplateDirectory).flatMap(d => (d ** "*").get()),
     scalateOverwrite := true,
