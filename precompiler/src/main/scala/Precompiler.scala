@@ -69,7 +69,7 @@ class Precompiler {
                 e.getMessage()
               ),
               e
-            );
+            )
           }
         }
         scalaFile.getParentFile.mkdirs
@@ -81,11 +81,11 @@ class Precompiler {
   private def collectCompileTargets(basedir: File, baseuri: String, extension: String): List[CompileTarget] = {
     var collected = List.empty[CompileTarget]
     if (basedir.isDirectory()) {
-      var files = basedir.listFiles();
+      var files = basedir.listFiles()
       if (files != null) {
         for (file <- files) {
           if (file.isDirectory()) {
-            collected = collectCompileTargets(file, baseuri + "/" + file.getName(), extension) ::: collected;
+            collected = collectCompileTargets(file, baseuri + "/" + file.getName(), extension) ::: collected
           } else {
             if (file.getName().endsWith(extension)) {
               collected = CompileTarget(baseuri + "/" + file.getName()) :: collected
