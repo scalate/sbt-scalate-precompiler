@@ -2,6 +2,22 @@ def Scala3 = "3.3.7"
 def Scala213 = "2.13.18"
 def Scala212 = "2.12.21"
 
+lazy val interface = project
+  .in(file("interface"))
+  .settings(baseSettings)
+  .settings(
+    autoScalaLibrary := false,
+    crossPaths := false,
+    javacOptions ++= Seq(
+      "-source",
+      "1.8",
+      "-target",
+      "1.8",
+    ),
+    Compile / doc / javacOptions := Nil,
+    name := "scalate-precompiler-interface",
+  )
+
 lazy val precompiler = projectMatrix
   .in(file("precompiler"))
   .defaultAxes(VirtualAxis.jvm)
@@ -14,6 +30,7 @@ lazy val precompiler = projectMatrix
     libraryDependencies += "io.github.scalate" %% "scalate-core" % "1.11.0",
   )
   .disablePlugins(ScriptedPlugin)
+  .dependsOn(interface)
 
 lazy val plugin = projectMatrix
   .in(file("plugin"))
@@ -54,6 +71,7 @@ object Version {
     }.taskValue
   )
   .enablePlugins(ScriptedPlugin)
+  .dependsOn(interface)
 
 lazy val baseSettings = Seq(
   organization := "io.github.scalate",

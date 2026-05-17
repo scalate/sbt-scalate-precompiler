@@ -1,11 +1,12 @@
 package org.fusesource.scalate
 
-import scala.language.reflectiveCalls
 import sbt.*
-import sbt.internal.inc.classpath.ClasspathUtilities
 import Keys.*
 import Def.Initialize
 import java.io.File
+import java.net.URLClassLoader
+import java.util.ServiceLoader
+import scala.jdk.CollectionConverters.*
 
 object ScalatePlugin extends AutoPlugin {
 
@@ -53,17 +54,6 @@ object ScalatePlugin extends AutoPlugin {
     )
   }
 
-  type Generator = {
-    var packagePrefix: String
-    var sources: File
-    var targetDirectory: File
-    var logConfig: File
-    var overwrite: Boolean
-    var scalateImports: Array[String]
-    var scalateBindings: Array[Array[AnyRef]]
-    def execute: Array[File]
-  }
-
   final case class ScalateClasspaths(classpath: PathFinder, scalateClasspath: PathFinder)
 
   def scalateClasspathsTask(cp: Classpath, scalateCp: Classpath) =
@@ -78,24 +68,25 @@ object ScalatePlugin extends AutoPlugin {
     templates: Seq[TemplateConfig]
   ) = {
     withScalateClassLoader(cp.files) { classLoader =>
-      templates flatMap { t =>
-        val className = "org.fusesource.scalate.Precompiler"
-        val klass = classLoader.loadClass(className)
-        val generator = klass.getDeclaredConstructor().newInstance().asInstanceOf[Generator]
-
+      templates.flatMap { t =>
+        val List(generator) = ServiceLoader
+          .load(classOf[org.fusesource.scalate.PrecompilerInterface], classLoader)
+          .iterator()
+          .asScala
+          .toList
         val source = t.scalateTemplateDirectory
         out.log.info("Compiling Templates in Template Directory: %s" format t.scalateTemplateDirectory.getAbsolutePath)
 
         val preservedLogbackConfiguration = Option(System.getProperty("logback.configurationFile"))
         val targetDirectory = outputDir / source.getName
         // Because we have to Scope each Template Folder we need to create unique package names
-        generator.packagePrefix = t.packagePrefix getOrElse source.getName
-        generator.sources = source
-        generator.targetDirectory = targetDirectory
-        generator.logConfig = logConfig
-        generator.overwrite = overwrite
-        generator.scalateImports = t.scalateImports.toArray
-        generator.scalateBindings = t.scalateBindings.toArray map { b =>
+        generator.setPackagePrefix(t.packagePrefix getOrElse source.getName)
+        generator.setSources(source)
+        generator.setTargetDirectory(targetDirectory)
+        generator.setLogConfig(logConfig)
+        generator.setOverwrite(overwrite)
+        generator.setScalateImports(t.scalateImports.toArray)
+        generator.setScalateBindings(t.scalateBindings.toArray.map { b =>
           Array(
             b.name.asInstanceOf[AnyRef],
             b.className.asInstanceOf[AnyRef],
@@ -104,8 +95,7 @@ object ScalatePlugin extends AutoPlugin {
             b.kind.asInstanceOf[AnyRef],
             b.isImplicit.asInstanceOf[AnyRef]
           )
-
-        }
+        })
         try {
           generator.execute.toList
         } finally {
@@ -141,14 +131,15 @@ object ScalatePlugin extends AutoPlugin {
    * Runs a block of code with the Scalate classpath as the context class loader.
    * The Scalate classpath is the runClassPath plus the buildScalaInstance's jars.
    */
-  protected def withScalateClassLoader[A](runClassPath: Seq[File])(f: ClassLoader => A): A = {
-    val oldLoader = Thread.currentThread.getContextClassLoader
-    val loader = ClasspathUtilities.toLoader(runClassPath)
-    Thread.currentThread.setContextClassLoader(loader)
+  private def withScalateClassLoader[A](runClassPath: Seq[File])(f: ClassLoader => A): A = {
+    val loader = new URLClassLoader(
+      runClassPath.map(_.toURI.toURL).toArray,
+      classOf[org.fusesource.scalate.PrecompilerInterface].getClassLoader
+    )
     try {
       f(loader)
     } finally {
-      Thread.currentThread.setContextClassLoader(oldLoader)
+      loader.close()
     }
   }
 

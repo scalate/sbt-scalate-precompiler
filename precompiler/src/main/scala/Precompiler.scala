@@ -6,17 +6,39 @@ import java.io.File
 /**
  * Uses the Scalate template engine to generate Scala source files for Scalate templates.
  */
-class Precompiler {
+class Precompiler extends PrecompilerInterface {
 
-  var sources: File = _
-  var targetDirectory: File = _
-  var logConfig: File = _
-  var overwrite: Boolean = _
-  var scalateImports: Array[String] = Array.empty
-  var scalateBindings: Array[Array[AnyRef]] = Array.empty // weird structure to represent Scalate Binding
-  var packagePrefix: String = _
+  override def setLogConfig(config: File): Unit = {
+    this.logConfig = config
+  }
+  override def setOverwrite(overwrite: Boolean): Unit = {
+    this.overwrite = overwrite
+  }
+  override def setPackagePrefix(prefix: String): Unit = {
+    this.packagePrefix = prefix
+  }
+  override def setScalateBindings(bindings: Array[Array[Object]]): Unit = {
+    this.scalateBindings = bindings
+  }
+  override def setScalateImports(imports: Array[String]): Unit = {
+    this.scalateImports = imports
+  }
+  override def setSources(source: File): Unit = {
+    this.sources = source
+  }
+  override def setTargetDirectory(directory: File): Unit = {
+    this.targetDirectory = directory
+  }
 
-  lazy val engine = {
+  private var sources: File = _
+  private var targetDirectory: File = _
+  private var logConfig: File = _
+  private var overwrite: Boolean = _
+  private var scalateImports: Array[String] = Array.empty
+  private var scalateBindings: Array[Array[AnyRef]] = Array.empty // weird structure to represent Scalate Binding
+  private var packagePrefix: String = _
+
+  private lazy val engine = {
     val e = new TemplateEngine
 
     // initialize template engine
@@ -37,7 +59,7 @@ class Precompiler {
     e
   }
 
-  def execute: Array[File] = {
+  override def execute(): Array[File] = {
     System.setProperty("logback.configurationFile", logConfig.toString)
 
     if (sources == null) {
