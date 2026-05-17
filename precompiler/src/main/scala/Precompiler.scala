@@ -83,7 +83,7 @@ class Precompiler {
   private def collectCompileTargets(basedir: File, baseuri: String, extension: String): List[CompileTarget] = {
     var collected = List.empty[CompileTarget]
     if (basedir.isDirectory()) {
-      var files = basedir.listFiles()
+      val files = basedir.listFiles()
       if (files != null) {
         for (file <- files) {
           if (file.isDirectory()) {
