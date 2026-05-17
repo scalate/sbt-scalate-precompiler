@@ -81,7 +81,6 @@ object ScalatePlugin extends AutoPlugin {
       templates flatMap { t =>
         val className = "org.fusesource.scalate.Precompiler"
         val klass = classLoader.loadClass(className)
-        val inst = klass.getDeclaredConstructor().newInstance()
         val generator = klass.getDeclaredConstructor().newInstance().asInstanceOf[Generator]
 
         val source = t.scalateTemplateDirectory
