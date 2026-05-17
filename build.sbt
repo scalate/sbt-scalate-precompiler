@@ -82,7 +82,6 @@ lazy val baseSettings = Seq(
   publishTo := (
     if (isSnapshot.value) None else localStaging.value
   ),
-  publishConfiguration := publishConfiguration.value.withOverwrite(true),
   pomExtra := <url>https://github.com/scalate/sbt-scalate-precompiler</url>
   <licenses>
     <license>
