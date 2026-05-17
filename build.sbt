@@ -1,8 +1,23 @@
+import ReleaseTransformations._
+
 def sbt2 = "2.0.0-RC12"
 
 def Scala3 = "3.3.7"
 def Scala213 = "2.13.18"
 def Scala212 = "2.12.21"
+
+releaseProcess := Seq[ReleaseStep](
+  checkSnapshotDependencies,
+  inquireVersions,
+  setReleaseVersion,
+  commitReleaseVersion,
+  tagRelease,
+  releaseStepCommandAndRemaining("publishSigned"),
+  releaseStepCommandAndRemaining("sonaRelease"),
+  setNextVersion,
+  commitNextVersion,
+  pushChanges,
+)
 
 lazy val precompiler = projectMatrix
   .in(file("precompiler"))
@@ -72,7 +87,6 @@ object Version {
 
 lazy val baseSettings = Seq(
   organization := "io.github.scalate",
-  version := "1.10.0.0-SNAPSHOT",
   Global / transitiveClassifiers := Seq(Artifact.SourceClassifier),
   Test / parallelExecution := false,
   Test / logBuffered := false,
