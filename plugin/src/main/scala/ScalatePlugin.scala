@@ -20,9 +20,6 @@ object ScalatePlugin extends AutoPlugin {
 
   /**
    * Template Configuration
-   * @param scalateTemplateDirectory
-   * @param scalateImports
-   * @param scalateBindings
    */
   case class TemplateConfig(
     scalateTemplateDirectory: File,
