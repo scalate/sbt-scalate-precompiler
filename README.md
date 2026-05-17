@@ -1,5 +1,7 @@
 # sbt-scalate-precompiler
 
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.scalate/sbt-scalate-precompiler_sbt2_3.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.scalate/sbt-scalate-precompiler_sbt2_3)
+
 Integration for SBT that lets you generate sources for your Scalate templates and precompile them as part of the normal compilation process. 
 This plugin is published to sonatype oss repository.
  
@@ -10,7 +12,7 @@ This plugin is published to sonatype oss repository.
 Include the plugin in `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.scalatra.scalate" % "sbt-scalate-precompiler" % "1.10.0.0")
+addSbtPlugin("io.github.scalate" % "sbt-scalate-precompiler" % "1.11.0.0")
 ```
 
 Configure the plugin in `build.sbt`:
