@@ -32,12 +32,12 @@ object ScalatePlugin extends AutoPlugin {
 
   object ScalateKeys {
     val scalateTemplateConfig =
-      SettingKey[Seq[TemplateConfig]]("scalate-template-configuration", "Different Template Configurations")
+      settingKey[Seq[TemplateConfig]]("Different Template Configurations")
     val scalateLoggingConfig =
-      SettingKey[File]("scalate-logging-config", "Logback config to get rid of that infernal debug output.")
+      settingKey[File]("Logback config to get rid of that infernal debug output.")
     val scalateOverwrite =
-      SettingKey[Boolean]("scalate-overwrite", "Always generate the Scala sources even when they haven't changed")
-    val scalateClasspaths = TaskKey[ScalateClasspaths]("scalate-classpaths")
+      settingKey[Boolean]("Always generate the Scala sources even when they haven't changed")
+    val scalateClasspaths = taskKey[ScalateClasspaths]("")
   }
 
   import ScalateKeys.*
