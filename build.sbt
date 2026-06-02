@@ -1,6 +1,6 @@
 import ReleaseTransformations._
 
-def sbt2 = "2.0.0-RC13"
+def sbt2 = "2.0.0-RC14"
 
 def Scala3 = "3.3.7"
 def Scala213 = "2.13.18"
