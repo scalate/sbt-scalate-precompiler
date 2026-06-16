@@ -1,6 +1,6 @@
 import ReleaseTransformations._
 
-def sbt2 = "2.0.0-RC14"
+def sbt2 = "2.0.0"
 
 def Scala3 = "3.3.8"
 def Scala213 = "2.13.18"
@@ -146,5 +146,5 @@ lazy val baseSettings = Seq(
   </developers>
 )
 
-publish / skip := true
-autoScalaLibrary := false
+LocalRootProject / publish / skip := true
+LocalRootProject / autoScalaLibrary := false
