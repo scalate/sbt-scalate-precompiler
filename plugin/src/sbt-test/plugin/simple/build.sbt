@@ -3,7 +3,7 @@ import ScalateKeys._
 
 scalaVersion := "2.12.21"
 
-crossScalaVersions ++= Seq("2.13.18", "3.3.8")
+crossScalaVersions ++= Seq("3.9.0", "3.3.8")
 
 libraryDependencies += "io.github.scalate" %% "scalate-core" % "1.11.0" % "compile"
 
