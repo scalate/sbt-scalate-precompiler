@@ -3,7 +3,7 @@ import ScalateKeys._
 
 scalaVersion := "2.12.21"
 
-libraryDependencies += "io.github.scalate" %% "scalate-core" % "1.11.0" % "compile"
+libraryDependencies += "io.github.scalate" %% "scalate-core" % "1.11.1" % "compile"
 
 scalateSettings ++ Seq(
   scalateOverwrite := false

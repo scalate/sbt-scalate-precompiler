@@ -32,7 +32,7 @@ lazy val precompiler = projectMatrix
     sbtPlugin := false,
     scalacOptions += "-release:8",
     name := "scalate-precompiler",
-    libraryDependencies += "io.github.scalate" %% "scalate-core" % "1.11.0",
+    libraryDependencies += "io.github.scalate" %% "scalate-core" % "1.11.1",
   )
   .disablePlugins(ScriptedPlugin)
 
