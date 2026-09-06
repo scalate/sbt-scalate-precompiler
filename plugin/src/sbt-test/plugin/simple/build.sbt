@@ -5,7 +5,7 @@ scalaVersion := "2.12.21"
 
 crossScalaVersions ++= Seq("2.13.18", "3.3.8")
 
-libraryDependencies += "io.github.scalate" %% "scalate-core" % "1.11.0" % "compile"
+libraryDependencies += "io.github.scalate" %% "scalate-core" % "1.11.1" % "compile"
 
 scalateSettings
 Compile / scalateTemplateConfig := {
